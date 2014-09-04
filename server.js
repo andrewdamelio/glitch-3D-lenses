@@ -13,6 +13,7 @@ app.get('/', function(req, res) {
   res.status(200).end()
 })
 
+// used to apply the blue and red filters to a canvas 
 function filterCanvas (filter, canvas, ctx) {
   if (canvas.width > 0 && canvas.height > 0) {
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -21,15 +22,15 @@ function filterCanvas (filter, canvas, ctx) {
   }
 }
 
-  // filter that shifts all color information to red
+  // filter that shifts all color information to blue
 function blue (pixels, args) {
   var d = pixels.data
   for (var i = 0; i < d.length; i += 4) {
     var r = d[i]
     var g = d[i + 1]
     var b = d[i + 2]
-    d[i] = (r+g+b)/3        // apply average to red channel
-    d[i + 1] = d[i + 0] = 0 // zero out green and blue channel
+    d[i] = (r+g+b)/3        // apply average to blue channel
+    d[i + 1] = d[i + 0] = 0 // zero out green and red channel
   }
   return pixels
 }
@@ -61,12 +62,15 @@ function lens3D (buffer) {
   var canvas3 = new Canvas(width, height)
   var ctx3 = canvas3.getContext('2d')
 
+  // draw half the image on temp canvas and apply red filter
   ctx2.drawImage(img, 0, 0, img.width/2, img.height, 0, 0, width, height)
   filterCanvas(red, canvas2, ctx2)
 
+  // draw half the image on another temp canvas and apply blue filter
   ctx3.drawImage(img, img.width/2, 0, img.width, img.height, 0, 0, width, height)
   filterCanvas(blue, canvas3, ctx3)
 
+  // combined the two previous filterd canvases onto a new canvas 
   ctx.drawImage(canvas2, 0, 0, width/2, height)
   ctx.drawImage(canvas3, width/2, 0, width, height)
 
@@ -74,6 +78,7 @@ function lens3D (buffer) {
   return buffer
 }
 
+// revist.link endpoint
 app.post('/service', function(req, res) {
   var buffer = dataUriToBuffer(req.body.content.data)
   var glitchImage = lens3D(buffer)
@@ -83,6 +88,6 @@ app.post('/service', function(req, res) {
   res.json(req.body)
 })
 
-
+//start up server
 app.listen(8080)
 console.log('server running on port: ', 8080)
