@@ -1,0 +1,20 @@
+{
+  "name": "glitch-3D-lenses",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew D'Amelio",
+  "license": "GPL3",
+  "dependencies": {
+    "body-parser": "^1.6.7",
+    "canvas": "^1.1.6",
+    "data-uri-to-buffer": "0.0.3",
+    "express": "^4.8.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.2.1"
+  }
+}
