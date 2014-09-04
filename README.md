@@ -5,6 +5,7 @@ The API provides a single `/service` endpoint to POST an image to, which respond
 
 
 eg. 
+
 ![sample shuffled image](http://i.imgur.com/56CEeFx.png)
 
 TO
